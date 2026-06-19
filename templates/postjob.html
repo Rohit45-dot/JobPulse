@@ -1,0 +1,446 @@
+{% extends 'base.html' %}
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post a Job - TechHire</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <style>
+        .header-img {
+            height: 150px;
+            background-image: linear-gradient(to right, #4e73df, #224abe);
+            color: white;
+        }
+        .form-label {
+            font-weight: 600;
+        }
+        .feature-icon {
+            font-size: 1.5rem;
+            color: #4e73df;
+        }
+        .btn-primary {
+            background-color: #4e73df;
+            border-color: #4e73df;
+        }
+        .btn-primary:hover {
+            background-color: #224abe;
+            border-color: #224abe;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    {% comment %} <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">TechHire</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Find Jobs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Post a Job</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                </ul>
+                <div class="d-flex">
+                    <a href="#" class="btn btn-outline-light me-2">Login</a>
+                    <a href="#" class="btn btn-primary">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </nav> {% endcomment %}
+
+    <!-- Header -->
+    <header class="header-img d-flex align-items-center">
+        <div class="container">
+            <div >
+                <div class="col-md-8">
+                    <h1 class="display-5 fw-bold">Post a Job</h1>
+                    <p class="fs-5">Find the right tech talent for your company. Reach thousands of qualified candidates.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container my-5">
+        <div class="row">
+            <!-- Job Post Form -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm">
+                    <div class="card-body p-4">
+                        <h2 class="mb-4">Job Details</h2>
+                        <form>
+                            <!-- Company Info -->
+                            <div class="mb-4">
+                                <h5 class="border-bottom pb-2">Company Information</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="companyName" class="form-label">Company Name*</label>
+                                        <input type="text" class="form-control" id="companyName" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="companyWebsite" class="form-label">Company Website</label>
+                                        <input type="url" class="form-control" id="companyWebsite">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="companyDescription" class="form-label">Company Description*</label>
+                                    <textarea class="form-control" id="companyDescription" rows="3" required></textarea>
+                                    <div class="form-text">Provide a brief overview of your company and culture.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="companyLogo" class="form-label">Company Logo</label>
+                                    <input class="form-control" type="file" id="companyLogo">
+                                </div>
+                            </div>
+
+                            <!-- Job Details -->
+                            <div class="mb-4">
+                                <h5 class="border-bottom pb-2">Job Details</h5>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobTitle" class="form-label">Job Title*</label>
+                                        <input type="text" class="form-control" id="jobTitle" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobDepartment" class="form-label">Department*</label>
+                                        <select class="form-select" id="jobDepartment" required>
+                                            <option value="" selected disabled>Select department</option>
+                                            <option value="engineering">Engineering</option>
+                                            <option value="design">Design</option>
+                                            <option value="product">Product</option>
+                                            <option value="marketing">Marketing</option>
+                                            <option value="sales">Sales</option>
+                                            <option value="customer_support">Customer Support</option>
+                                            <option value="hr">Human Resources</option>
+                                            <option value="finance">Finance</option>
+                                            <option value="operations">Operations</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobType" class="form-label">Job Type*</label>
+                                        <select class="form-select" id="jobType" required>
+                                            <option value="" selected disabled>Select job type</option>
+                                            <option value="full_time">Full-time</option>
+                                            <option value="part_time">Part-time</option>
+                                            <option value="contract">Contract</option>
+                                            <option value="internship">Internship</option>
+                                            <option value="temporary">Temporary</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobLocation" class="form-label">Location*</label>
+                                        <select class="form-select" id="jobLocation" required>
+                                            <option value="" selected disabled>Select location type</option>
+                                            <option value="on_site">On-site</option>
+                                            <option value="remote">Remote</option>
+                                            <option value="hybrid">Hybrid</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobCity" class="form-label">City/Region*</label>
+                                        <input type="text" class="form-control" id="jobCity" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="jobCountry" class="form-label">Country*</label>
+                                        <select class="form-select" id="jobCountry" required>
+                                            <option value="" selected disabled>Select country</option>
+                                            <option value="Ind">India</option>
+                                            <option value="us">United States</option>
+                                            <option value="ca">Canada</option>
+                                            <option value="uk">United Kingdom</option>
+                                            <option value="other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="salaryRange" class="form-label">Salary Range</label>
+                                        <select class="form-select" id="salaryRange">
+                                            <option value="" selected disabled>Select salary range</option>
+                                            <option value="30k-50k">$30,000 - $50,000</option>
+                                            <option value="50k-70k">$50,000 - $70,000</option>
+                                            <option value="70k-90k">$70,000 - $90,000</option>
+                                            <option value="90k-110k">$90,000 - $110,000</option>
+                                            <option value="110k-130k">$110,000 - $130,000</option>
+                                            <option value="130k-150k">$130,000 - $150,000</option>
+                                            <option value="150k+">$150,000+</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="experienceLevel" class="form-label">Experience Level*</label>
+                                        <select class="form-select" id="experienceLevel" required>
+                                            <option value="" selected disabled>Select experience level</option>
+                                            <option value="entry">Entry Level</option>
+                                            <option value="mid">Mid Level</option>
+                                            <option value="senior">Senior Level</option>
+                                            <option value="lead">Lead/Management</option>
+                                            <option value="executive">Executive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Job Description -->
+                            <div class="mb-4">
+                                <h5 class="border-bottom pb-2">Job Description & Requirements</h5>
+                                <div class="mb-3">
+                                    <label for="jobDescription" class="form-label">Job Description*</label>
+                                    <textarea class="form-control" id="jobDescription" rows="5" required></textarea>
+                                    <div class="form-text">Describe the role, responsibilities, and what a typical day looks like.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="jobRequirements" class="form-label">Requirements & Qualifications*</label>
+                                    <textarea class="form-control" id="jobRequirements" rows="5" required></textarea>
+                                    <div class="form-text">List the technical skills, education, and experience needed for this role.</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="techStack" class="form-label">Technology Stack</label>
+                                    <input type="text" class="form-control" id="techStack">
+                                    <div class="form-text">List the primary technologies used (e.g., Python, React, AWS, etc.).</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="benefits" class="form-label">Benefits & Perks</label>
+                                    <textarea class="form-control" id="benefits" rows="3"></textarea>
+                                    <div class="form-text">Describe the benefits package, work perks, and company culture.</div>
+                                </div>
+                            </div>
+
+                            <!-- Application Process -->
+                            <div class="mb-4">
+                                <h5 class="border-bottom pb-2">Application Process</h5>
+                                <div class="mb-3">
+                                    <label for="applicationDeadline" class="form-label">Application Deadline</label>
+                                    <input type="date" class="form-control" id="applicationDeadline">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="applicationUrl" class="form-label">Application URL</label>
+                                    <input type="url" class="form-control" id="applicationUrl">
+                                    <div class="form-text">External link where candidates can apply</div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="contactEmail" class="form-label">Contact Email*</label>
+                                    <input type="email" class="form-control" id="contactEmail" required>
+                                </div>
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="receiveApplications">
+                                    <label class="form-check-label" for="receiveApplications">
+                                        Receive applications via email
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Posting Options -->
+                            <div class="mb-4">
+                                <h5 class="border-bottom pb-2">Posting Options</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Posting Duration*</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="postingDuration" id="duration30" value="30" checked>
+                                        <label class="form-check-label" for="duration30">
+                                            30 days - $299
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="postingDuration" id="duration60" value="60">
+                                        <label class="form-check-label" for="duration60">
+                                            60 days - $499
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="postingDuration" id="duration90" value="90">
+                                        <label class="form-check-label" for="duration90">
+                                            90 days - $699
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Featured Options</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="featuredJob">
+                                        <label class="form-check-label" for="featuredJob">
+                                            Featured Job (Highlighted in search results) - $99
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="priorityListing">
+                                        <label class="form-check-label" for="priorityListing">
+                                            Priority Listing (Appear at the top of search results) - $149
+                                        </label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="socialPromotion">
+                                        <label class="form-check-label" for="socialPromotion">
+                                            Social Media Promotion - $199
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary btn-lg" id="submit_btn">Preview & Submit Job</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Posting Summary</h5>
+                        <p class="card-text">Basic job posting - $299</p>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Base Price
+                                <span>$299</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                Featured Options
+                                <span>$0</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                                Total
+                                <span>$299</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Why Post a Job With Us?</h5>
+                        <div class="d-flex align-items-start mt-3">
+                            <div class="feature-icon me-3">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <div>
+                                <h6>Reach Quality Candidates</h6>
+                                <p class="small">Access our database of qualified tech professionals.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mt-3">
+                            <div class="feature-icon me-3">
+                                <i class="bi bi-lightning-fill"></i>
+                            </div>
+                            <div>
+                                <h6>Fast Results</h6>
+                                <p class="small">Our average time-to-fill is just 18 days.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mt-3">
+                            <div class="feature-icon me-3">
+                                <i class="bi bi-graph-up"></i>
+                            </div>
+                            <div>
+                                <h6>Detailed Analytics</h6>
+                                <p class="small">Track views, applications, and candidate quality.</p>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-start mt-3">
+                            <div class="feature-icon me-3">
+                                <i class="bi bi-shield-check"></i>
+                            </div>
+                            <div>
+                                <h6>Satisfaction Guarantee</h6>
+                                <p class="small">If you're not satisfied, we'll extend your posting for free.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Need Help?</h5>
+                        <p class="card-text">Our team is available to assist you with your job posting.</p>
+                        <a href="#" class="btn btn-outline-primary">Contact Support</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <h5>TechHire</h5>
+                    <p class="small">Connecting top tech talent with innovative companies.</p>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6>Employers</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Post a Job</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Pricing</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Resources</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6>Job Seekers</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Browse Jobs</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Create Profile</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Career Resources</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6>Company</h6>
+                    <ul class="nav flex-column">
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">About Us</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Contact</a></li>
+                        <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-white-50">Privacy Policy</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <h6>Follow Us</h6>
+                    <div class="d-flex gap-3">
+                        <a href="#" class="text-white"><i class="bi bi-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="border-top mt-3 pt-3">
+                <p class="small text-white-50">&copy; 2025 TechHire. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js">
+        let submit = document.getElementById("submit_btn");
+        submit.addEventListner('click', (e)=>{
+            alert("Your job is successfully submitted.")
+        })
+    </script>
+</body>
+</html>
+
+{% endblock body %}

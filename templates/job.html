@@ -1,0 +1,465 @@
+{% extends 'base.html'%}
+{% block body %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Listings - JobPulse</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .search-container {
+            background: linear-gradient(135deg, #4E54C8 0%, #8F94FB 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .job-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: none;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .company-logo {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            border-radius: 8px;
+            border: 1px solid #eee;
+            padding: 10px;
+            background-color: white;
+        }
+        
+        .job-title {
+            color: #2E3192;
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .company-name {
+            color: #495057;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .job-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .job-meta i {
+            color: #4E54C8;
+            margin-right: 0.3rem;
+        }
+        
+        .job-tag {
+            background-color: rgba(78, 84, 200, 0.1);
+            color: #4E54C8;
+            border-radius: 20px;
+            padding: 0.2rem 0.8rem;
+            font-size: 0.8rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        
+        .apply-btn {
+            background-color: #4E54C8;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 0.5rem 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+        
+        .apply-btn:hover {
+            background-color: #2E3192;
+            color: white;
+        }
+        
+        .save-job {
+            color: #6c757d;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .save-job:hover, .save-job.active {
+            color: #ff6b6b;
+            border-color: #ff6b6b;
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 3rem;
+            background-color: white;
+            border-radius: 10px;
+            margin-top: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <!-- Search Section -->
+        <div class="search-container">
+            <h2 class="text-white mb-4">Find Your Dream Job</h2>
+            <div class="row">
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-0">
+                            <i class="bi bi-search text-muted"></i>
+                        </span>
+                        <input type="text" id="jobTitleSearch" class="form-control border-0 shadow-none" placeholder="Job title, keywords, or company">
+                    </div>
+                </div>
+                <div class="col-md-5 mb-3 mb-md-0">
+                    <div class="input-group">
+                        <span class="input-group-text bg-white border-0">
+                            <i class="bi bi-geo-alt text-muted"></i>
+                        </span>
+                        <input type="text" id="locationSearch" class="form-control border-0 shadow-none" placeholder="City, state, or remote">
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button id="searchBtn" class="btn btn-light w-100">Search Jobs</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Filters and Results Count -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <span id="resultsCount" class="fw-bold">10</span> jobs found
+            </div>
+            <div class="d-flex gap-2">
+                <select class="form-select form-select-sm" id="sortBy">
+                    <option value="recent">Most Recent</option>
+                    <option value="salary">Highest Salary</option>
+                    <option value="relevance">Relevance</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Job Listings -->
+        <div id="jobListings" class="row">
+            <!-- Job listings will be populated here dynamically with JavaScript -->
+        </div>
+        
+        <!-- No Results Message -->
+        <div id="noResultsMessage" class="no-results d-none">
+            <i class="bi bi-search" style="font-size: 3rem; color: #ccc;"></i>
+            <h3 class="mt-3">No jobs found</h3>
+            <p class="text-muted">Try different search terms or filters</p>
+        </div>
+        
+        <!-- Load More Button -->
+        <div class="text-center mt-4 mb-5">
+            <button id="loadMoreBtn" class="btn btn-outline-primary px-4 py-2">Load More Jobs</button>
+        </div>
+    </div>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom JavaScript -->
+    <script>
+        // Sample job data
+        const jobs = [
+            {
+                id: 1,
+                title: "Senior Frontend Developer",
+                company: "TechSolution India",
+                logo: "/api/placeholder/70/70",
+                location: "Bangalore",
+                type: "Full-time",
+                salary: "₹18-25 LPA",
+                posted: "2 days ago",
+                tags: ["React", "JavaScript", "TypeScript"],
+                description: "We are looking for an experienced Frontend Developer to join our dynamic team."
+            },
+            {
+                id: 2,
+                title: "Data Scientist",
+                company: "Analytics Hub",
+                logo: "/api/placeholder/70/70",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹16-22 LPA",
+                posted: "3 days ago",
+                tags: ["Python", "Machine Learning", "SQL"],
+                description: "Join our data science team to solve complex business problems using advanced analytics."
+            },
+            {
+                id: 3,
+                title: "DevOps Engineer",
+                company: "CloudWorks Technologies",
+                logo: "/api/placeholder/70/70",
+                location: "Hyderabad",
+                type: "Full-time",
+                salary: "₹14-20 LPA",
+                posted: "1 week ago",
+                tags: ["AWS", "Docker", "Kubernetes", "CI/CD"],
+                description: "Looking for a skilled DevOps engineer to optimize our cloud infrastructure."
+            },
+            {
+                id: 4,
+                title: "UI/UX Designer",
+                company: "Creative Digital Solutions",
+                logo: "/api/placeholder/70/70",
+                location: "Mumbai",
+                type: "Full-time",
+                salary: "₹10-15 LPA",
+                posted: "5 days ago",
+                tags: ["Figma", "Adobe XD", "User Research"],
+                description: "Create stunning user experiences for our web and mobile applications."
+            },
+            {
+                id: 5,
+                title: "Backend Developer",
+                company: "Fintech Innovations",
+                logo: "/api/placeholder/70/70",
+                location: "Delhi NCR",
+                type: "Full-time",
+                salary: "₹15-22 LPA",
+                posted: "Just now",
+                tags: ["Java", "Spring Boot", "Microservices"],
+                description: "Develop robust backend services for our financial technology platform."
+            },
+            {
+                id: 6,
+                title: "HR Manager",
+                company: "Global Staffing Solutions",
+                logo: "/api/placeholder/70/70",
+                location: "Chennai",
+                type: "Full-time",
+                salary: "₹12-18 LPA",
+                posted: "3 days ago",
+                tags: ["Recruitment", "Employee Relations", "HR Policy"],
+                description: "Lead our human resources department and implement effective HR strategies."
+            },
+            {
+                id: 7,
+                title: "Android Developer",
+                company: "MobileFirst Apps",
+                logo: "/api/placeholder/70/70",
+                location: "Bangalore",
+                type: "Remote",
+                salary: "₹12-18 LPA",
+                posted: "1 week ago",
+                tags: ["Kotlin", "Java", "Android SDK"],
+                description: "Create innovative mobile applications for millions of users."
+            },
+            {
+                id: 8,
+                title: "Digital Marketing Specialist",
+                company: "MarketReach Media",
+                logo: "/api/placeholder/70/70",
+                location: "Mumbai",
+                type: "Full-time",
+                salary: "₹8-12 LPA",
+                posted: "2 weeks ago",
+                tags: ["SEO", "SEM", "Social Media", "Content Marketing"],
+                description: "Drive our digital marketing campaigns to increase brand awareness and customer acquisition."
+            },
+            {
+                id: 9,
+                title: "Product Manager",
+                company: "InnovateTech Solutions",
+                logo: "/api/placeholder/70/70",
+                location: "Pune",
+                type: "Full-time",
+                salary: "₹20-28 LPA",
+                posted: "4 days ago",
+                tags: ["Product Strategy", "Agile", "User Research"],
+                description: "Lead our product development initiatives from concept to launch."
+            },
+            {
+                id: 10,
+                title: "Network Security Engineer",
+                company: "SecureNet Systems",
+                logo: "/api/placeholder/70/70",
+                location: "Hyderabad",
+                type: "Hybrid",
+                salary: "₹16-22 LPA",
+                posted: "1 week ago",
+                tags: ["Cybersecurity", "Network Security", "Firewalls", "Threat Analysis"],
+                description: "Protect our systems and data from security threats and vulnerabilities."
+            }
+        ];
+        
+        // DOM Elements
+        const jobListingsContainer = document.getElementById('jobListings');
+        const jobTitleSearch = document.getElementById('jobTitleSearch');
+        const locationSearch = document.getElementById('locationSearch');
+        const searchBtn = document.getElementById('searchBtn');
+        const sortBySelect = document.getElementById('sortBy');
+        const resultsCount = document.getElementById('resultsCount');
+        const noResultsMessage = document.getElementById('noResultsMessage');
+        const loadMoreBtn = document.getElementById('loadMoreBtn');
+        
+        // Display jobs function
+        function displayJobs(jobsToDisplay) {
+            // Clear current listings
+            jobListingsContainer.innerHTML = '';
+            
+            if (jobsToDisplay.length === 0) {
+                noResultsMessage.classList.remove('d-none');
+                loadMoreBtn.classList.add('d-none');
+            } else {
+                noResultsMessage.classList.add('d-none');
+                loadMoreBtn.classList.remove('d-none');
+                
+                // Update results count
+                resultsCount.textContent = jobsToDisplay.length;
+                
+                // Display each job
+                jobsToDisplay.forEach(job => {
+                    const jobCard = document.createElement('div');
+                    jobCard.className = 'col-lg-6';
+                    
+                    jobCard.innerHTML = `
+                        <div class="job-card">
+                            <div class="d-flex justify-content-between">
+                                <div class="d-flex gap-3">
+                                    <img src="${job.logo}" alt="${job.company} logo" class="company-logo">
+                                    <div>
+                                        <h3 class="job-title">${job.title}</h3>
+                                        <p class="company-name mb-0">${job.company}</p>
+                                    </div>
+                                </div>
+                                <button class="save-job btn" title="Save job">
+                                    <i class="bi bi-bookmark"></i>
+                                </button>
+                            </div>
+                            <div class="job-meta">
+                                <span><i class="bi bi-geo-alt"></i> ${job.location}</span>
+                                <span><i class="bi bi-clock"></i> ${job.type}</span>
+                                <span><i class="bi bi-currency-rupee"></i> ${job.salary}</span>
+                                <span><i class="bi bi-calendar-check"></i> Posted ${job.posted}</span>
+                            </div>
+                            <p class="mt-3 mb-3">${job.description}</p>
+                            <div class="mb-3">
+                                ${job.tags.map(tag => `<span class="job-tag">${tag}</span>`).join('')}
+                            </div>
+                            <div class="d-flex justify-content-end mt-3">
+                                <button class="apply-btn btn">Apply Now</button>
+                            </div>
+                        </div>
+                    `;
+                    
+                    jobListingsContainer.appendChild(jobCard);
+                });
+                
+                // Set up bookmark buttons
+                document.querySelectorAll('.save-job').forEach(button => {
+                    button.addEventListener('click', function() {
+                        this.classList.toggle('active');
+                        const icon = this.querySelector('i');
+                        if (icon.classList.contains('bi-bookmark')) {
+                            icon.classList.replace('bi-bookmark', 'bi-bookmark-fill');
+                        } else {
+                            icon.classList.replace('bi-bookmark-fill', 'bi-bookmark');
+                        }
+                    });
+                });
+            }
+        }
+        
+        // Filter jobs function
+        function filterJobs() {
+            const titleQuery = jobTitleSearch.value.toLowerCase();
+            const locationQuery = locationSearch.value.toLowerCase();
+            
+            const filteredJobs = jobs.filter(job => {
+                const titleMatch = titleQuery === '' || 
+                                  job.title.toLowerCase().includes(titleQuery) || 
+                                  job.company.toLowerCase().includes(titleQuery) || 
+                                  job.tags.some(tag => tag.toLowerCase().includes(titleQuery));
+                
+                const locationMatch = locationQuery === '' || 
+                                     job.location.toLowerCase().includes(locationQuery) ||
+                                     (locationQuery === 'remote' && job.type.toLowerCase() === 'remote');
+                
+                return titleMatch && locationMatch;
+            });
+            
+            // Sort jobs based on selected option
+            const sortOption = sortBySelect.value;
+            if (sortOption === 'recent') {
+                // Most recent first (This is simplistic - in real app would sort by date)
+                // For this demo, we'll just reverse to simulate different sorting
+                filteredJobs.reverse();
+            } else if (sortOption === 'salary') {
+                // Sort by highest salary (simplistic implementation)
+                filteredJobs.sort((a, b) => {
+                    // Extract max salary value for sorting
+                    const aMax = parseInt(a.salary.split('-')[1]);
+                    const bMax = parseInt(b.salary.split('-')[1]);
+                    return bMax - aMax;
+                });
+            }
+            
+            displayJobs(filteredJobs);
+        }
+        
+        // Event listeners
+        searchBtn.addEventListener('click', filterJobs);
+        sortBySelect.addEventListener('change', filterJobs);
+        
+        // Enable search on Enter key
+        jobTitleSearch.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') filterJobs();
+        });
+        
+        locationSearch.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') filterJobs();
+        });
+        
+        // Load more button (simplified implementation)
+        loadMoreBtn.addEventListener('click', function() {
+            alert('In a real application, this would load additional job listings from the server.');
+        });
+        
+        // Save job functionality
+        document.addEventListener('click', function(e) {
+            if (e.target.closest('.save-job')) {
+                const button = e.target.closest('.save-job');
+                button.classList.toggle('active');
+            }
+        });
+        
+        // Initialize - display all jobs
+        displayJobs(jobs);
+    </script>
+</body>
+</html>
+
+{% endblock body %}
